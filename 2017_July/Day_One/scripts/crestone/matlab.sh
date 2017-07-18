@@ -1,9 +1,11 @@
 #!/bin/bash
 #SBATCH --nodes=1			# Number of requested nodes
 #SBATCH --time=0:02:00			# Max walltime
-#SBATCH --qos=debug			# Specify debug QOS
-#SBATCH --partition=shas		# Specify Summit haswell nodes
+#SBATCH --qos=crestone			# Specify crestone QOS
+#SBATCH --partition=crc-serial		# Specify crestone nodes
 #SBATCH --output=matlab_%j.out		# Rename standard output file
+#SBATCH --reservation=basics17          # Reservation (only valid during workshop)
+
 
 
 # Written by:	Shelley Knuth
