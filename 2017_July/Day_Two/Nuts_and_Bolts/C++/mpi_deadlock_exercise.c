@@ -1,7 +1,6 @@
 /*
  *  Copyright (C) 2015  Timothy Brown
  *
- *  Modified by Nick Featherstone 2017
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -36,8 +35,6 @@ main(int argc, char **argv)
 	int offset = 0;			/* Offset into data array           */
 	int *data  = NULL;		/* Data array                       */
 	int total  = 0;			/* Total of the data array          */
-    MPI_Request reqs[2];    /* Array of interrupt requests used for send and receive */
-    MPI_Status mstat[2];   /* Status array used for MPI Wait-All /*
 
 	/* Initialize MPI */
 	ierr = MPI_Init(NULL, NULL);
@@ -48,11 +45,8 @@ main(int argc, char **argv)
 
 	/*  Only the root rank reads the command line arguments */
 	if (rank == 0) {
-        N = 10000;
-		if (N <= 0) {
-			warnx("Will not run with negative array size.");
-			MPI_Abort(MPI_COMM_WORLD, ierr);
-		}
+		N = 10000;
+
 		printf("Running on %d processors.\nWith %d elements.\n", nprocs,
 		       N * nprocs);
 	}
@@ -62,7 +56,6 @@ main(int argc, char **argv)
 
 	/* Allocate the data array */
 	data = malloc(N * nprocs * sizeof(int));
-
 	if (!data) {
 		warnx("Unable to allocate: %lu", N * nprocs * sizeof(int));
 		MPI_Abort(MPI_COMM_WORLD, ierr);
@@ -84,13 +77,11 @@ main(int argc, char **argv)
 	/* Send/Receive for all processors */
 	offset = 0;
 	for (i = 0; i < nprocs -1; ++i) {
-
-	    ierr = MPI_Isend(&(data[offset]), N, MPI_INT, left,
-			    rtag, MPI_COMM_WORLD, &reqs[0]);
 	    offset += N;
-	    ierr = MPI_Irecv(&(data[offset]), N, MPI_INT, right,
-			    rtag, MPI_COMM_WORLD, &reqs[1]);
-        ierr = MPI_Waitall(2, reqs, mstat);
+	    ierr = MPI_Recv(&(data[offset]), N, MPI_INT, right,
+			    rtag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	    ierr = MPI_Send(&(data[offset-N]), N, MPI_INT, left,
+			    rtag, MPI_COMM_WORLD);
 	}
 
 	/* Sum our data array */
@@ -111,3 +102,4 @@ main(int argc, char **argv)
 
 	return(EXIT_SUCCESS);
 }
+
