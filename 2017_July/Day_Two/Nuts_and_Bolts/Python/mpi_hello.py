@@ -18,6 +18,11 @@ def main():
     my_rank   = MPI.COMM_WORLD.Get_rank() # The rank of this process (ranges from 0 to num_proc-1)
     node_name = MPI.Get_processor_name()  # The name of the node
 
+    if (my_rank == 0):
+         sys.stdout.write(
+        "  %d MPI processes are now active.\n"
+        % (num_proc))
+
     sys.stdout.write(
         "  Hello from node %s, rank %d out of %d processes.\n"
         % (node_name, my_rank, num_proc))

@@ -28,7 +28,7 @@ def main():
         sys.stdout.write("  %d MPI Processes are now active.\n" %(num_proc))
     comm.Barrier()
 
-    stoken = my_rank
+    stoken = my_rank*2
     rtoken = 0
     tokens = []
 
@@ -51,20 +51,19 @@ def main():
             comm.send(stoken, dest=my_dest, tag=my_tag)
             stoken=rtoken
         else:
-            my_source = left
-            my_tag = left
-            rtoken = comm.recv(source=my_source, tag=my_tag) 
-            tokens.append(rtoken)
-            stoken = rtoken
-
             my_dest = right
             my_tag = my_rank
             comm.send(stoken, dest=my_dest, tag=my_tag)
             stoken=rtoken
 
-
+            my_source = left
+            my_tag = left
+            rtoken = comm.recv(source=my_source, tag=my_tag) 
+            tokens.append(rtoken)
+            stoken = rtoken
     rstr=str(my_rank)
     print 'Rank '+rstr+' has finished.  Tokens are:', tokens
+
 
     MPI.Finalize()
 main()
