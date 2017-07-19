@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
   ierr = MPI_Comm_size( MPI_COMM_WORLD, &numprocs);
   ierr = MPI_Comm_rank( MPI_COMM_WORLD, &myid);
   printf("Process %d of %d is running\n", myid, numprocs);
+  MPI_Barrier(MPI_COMM_WORLD);
 
   if ( myid == 0 ) {
     printf("Enter the number of intervals: \n");
