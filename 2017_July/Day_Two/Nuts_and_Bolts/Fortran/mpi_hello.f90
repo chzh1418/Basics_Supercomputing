@@ -19,9 +19,9 @@ PROGRAM MAIN
         !This avoids redundant output.
         Write(6,*)"  "//trim(adjustl(nproc_string))//" MPI processes are now active."
     Endif
-    If (MOD(my_rank,2) .eq. 0) Then
-        Write(6,*)"  Hello from node "//trim(node_name)//" rank "// &
-            & trim(adjustl(rank_string))//" out of "//trim(adjustl(nproc_string))//" processors." 
-    Endif
+
+    Write(6,*)"  Hello from node "//trim(node_name)//" rank "// &
+        & trim(adjustl(rank_string))//" out of "//trim(adjustl(nproc_string))//" processors." 
+
     Call MPI_Finalize(ierr)
 END PROGRAM MAIN

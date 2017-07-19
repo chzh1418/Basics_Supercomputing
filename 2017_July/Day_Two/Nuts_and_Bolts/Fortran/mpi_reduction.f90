@@ -36,7 +36,7 @@ PROGRAM pi_mpi
   CALL MPI_COMM_RANK( MPI_COMM_WORLD, myid, ierr )
   CALL MPI_COMM_SIZE( MPI_COMM_WORLD, numprocs, ierr )
   PRINT *, 'Process ', myid, ' of ', numprocs, ' is alive'
-
+  Call MPI_BARRIER(MPI_COMM_WORLD,ierr)
   sizetype   = 1
   sumtype    = 2
 
@@ -62,10 +62,10 @@ PROGRAM pi_mpi
   mypi = h * sum
 
   !                                 collect all the partial sums
-  CALL MPI_ALLREDUCE(mypi,pi,1,MPI_DOUBLE_PRECISION,MPI_SUM,0, &
+  CALL MPI_ALLREDUCE(mypi,pi,1,MPI_DOUBLE_PRECISION,MPI_SUM, &
        MPI_COMM_WORLD,ierr)
 
-  Write(6,*)myid, mypi, pi
+
   !                                 node 0 prints the answer.
   IF (myid .EQ. 0) THEN
      WRITE(6, 97) pi, ABS(pi - PI25DT)
