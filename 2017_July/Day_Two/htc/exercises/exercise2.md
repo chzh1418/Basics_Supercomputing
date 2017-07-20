@@ -7,6 +7,9 @@
 Each task / input file line should execute a single
 `matrix-multiply.py` process.
 
+How might you combine the output from the different tasks into a
+single output file?
+
 
 ## Tips
 

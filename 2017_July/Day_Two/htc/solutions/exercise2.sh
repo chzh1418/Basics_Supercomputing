@@ -18,4 +18,8 @@ module load loadbalance
     done
 ) >lb_cmd_file-${SLURM_JOB_ID}
 
-time mpirun lb lb_cmd_file-${SLURM_JOB_ID}
+time (
+    mpirun lb lb_cmd_file-${SLURM_JOB_ID}
+    cat htc-exercise2-${SLURM_JOB_ID}-*.out >htc-exercise2-${SLURM_JOB_ID}.out
+    rm htc-exercise2-${SLURM_JOB_ID}-*.out
+)
